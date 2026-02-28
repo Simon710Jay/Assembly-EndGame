@@ -17,14 +17,18 @@ function addGuessedLetter(letter) {
     [...prevLetters, letter])
 }
 
-  const languageElement = languages.map(lan =>{
+  const languageElement = languages.map((lang, index) =>{
+    const isLanguageLost = index < wrongGuessCount
       const style = {
-        backgroundColor: lan.backgroundColor,
-        color: lan.color,
+        backgroundColor: lang.backgroundColor,
+        color: lang.color,
       }
+      const className = clsx("chip", isLanguageLost && "lost")
       return <span
-       className="chip" 
-       style={style}>{lan.name}
+       className={className} 
+       style={style} 
+        key={lang.name}
+       >{lang.name}
        </span>
   })
 
