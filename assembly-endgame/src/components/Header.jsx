@@ -7,7 +7,12 @@ export default function Header() {
 const [currentWord, setCurrentWord] = useState("react")
 const [guessedLetters, setGuessedLetters] = useState([])
 
-const wrongGuessCount = guessedLetters.filter(letter => !currentWord.includes(letter)).length
+const wrongGuessCount = 
+guessedLetters.filter(letter => !currentWord.includes(letter)).length
+const isGameWon = 
+currentWord.split("").every(letter => guessedLetters.includes(letter))
+const isGameLost = wrongGuessCount >= languages.length - 1
+const isGameOver = isGameWon || isGameLost
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
@@ -74,7 +79,7 @@ function addGuessedLetter(letter) {
         {keyboardElements}
       </section>
 
-      <button className="new-game">New Game</button>
+     {isGameOver && <button className="new-game">New Game</button>}
     </main>
   )
 }
