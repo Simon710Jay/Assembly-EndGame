@@ -6,7 +6,8 @@ import clsx from "clsx"
 export default function Header() {
 const [currentWord, setCurrentWord] = useState("react")
 const [guessedLetters, setGuessedLetters] = useState([])
- 
+
+const wrongGuessCount = guessedLetters.filter(letter => !currentWord.includes(letter)).length
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
@@ -39,7 +40,6 @@ function addGuessedLetter(letter) {
       correct: isCorrect,
       wrong: isWrong,
     })
-    console.log(className)
 
     return (
       <button key={letter} onClick={() => 
