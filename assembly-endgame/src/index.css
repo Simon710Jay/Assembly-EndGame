@@ -49,6 +49,14 @@ section.game-status {
     margin-block: 30px;
 }
 
+section.game-status.won {
+    background-color: #10A95B;
+}
+
+section.game-status.lost {
+    background-color: #BA2A2A;
+}
+
 section.game-status>p {
     margin: 5px;
 }
@@ -92,10 +100,10 @@ section.word {
     display: flex;
     justify-content: center;
     gap: 2px;
-     margin-top: 36px;
+    margin-top: 36px;
 }
 
-section.word > span {
+section.word>span {
     height: 40px;
     width: 40px;
     background-color: #323232;
@@ -115,15 +123,15 @@ section.keyboard {
     margin-top: 25px;
 }
 
-section.keyboard > button.correct {
+section.keyboard>button.correct {
     background-color: #10A95B;
 }
 
-section.keyboard > button.wrong {
+section.keyboard>button.wrong {
     background-color: #EC5D49;
 }
 
-section.keyboard > button {
+section.keyboard>button {
     height: 35px;
     width: 35px;
     background-color: #FCBA29;

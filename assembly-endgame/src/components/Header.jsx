@@ -4,43 +4,43 @@ import clsx from "clsx"
 
 
 export default function Header() {
-const [currentWord, setCurrentWord] = useState("react")
-const [guessedLetters, setGuessedLetters] = useState([])
+  const [currentWord, setCurrentWord] = useState("react")
+  const [guessedLetters, setGuessedLetters] = useState([])
 
-const wrongGuessCount = 
-guessedLetters.filter(letter => !currentWord.includes(letter)).length
-const isGameWon = 
-currentWord.split("").every(letter => guessedLetters.includes(letter))
-const isGameLost = wrongGuessCount >= languages.length - 1
-const isGameOver = isGameWon || isGameLost
+  const wrongGuessCount =
+    guessedLetters.filter(letter => !currentWord.includes(letter)).length
+  const isGameWon =
+    currentWord.split("").every(letter => guessedLetters.includes(letter))
+  const isGameLost = wrongGuessCount >= languages.length - 1
+  const isGameOver = isGameWon || isGameLost
 
-const alphabet = "abcdefghijklmnopqrstuvwxyz"
+  const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
-function addGuessedLetter(letter) {
-  setGuessedLetters(prevLetters =>
-    prevLetters.includes(letter) ? prevLetters :
-    [...prevLetters, letter])
-}
+  function addGuessedLetter(letter) {
+    setGuessedLetters(prevLetters =>
+      prevLetters.includes(letter) ? prevLetters :
+        [...prevLetters, letter])
+  }
 
-  const languageElement = languages.map((lang, index) =>{
+  const languageElement = languages.map((lang, index) => {
     const isLanguageLost = index < wrongGuessCount
-      const style = {
-        backgroundColor: lang.backgroundColor,
-        color: lang.color,
-      }
-      const className = clsx("chip", isLanguageLost && "lost")
-      return <span
-       className={className} 
-       style={style} 
-        key={lang.name}
-       >{lang.name}
-       </span>
+    const style = {
+      backgroundColor: lang.backgroundColor,
+      color: lang.color,
+    }
+    const className = clsx("chip", isLanguageLost && "lost")
+    return <span
+      className={className}
+      style={style}
+      key={lang.name}
+    >{lang.name}
+    </span>
   })
 
   const letterElement = currentWord.split("").map((letter, index) => (
     <span key={index}>{guessedLetters.includes(letter) ? letter.toUpperCase() : ""}</span>
   ))
-  
+
   const keyboardElements = alphabet.split("").map((letter) => {
     const isGuessed = guessedLetters.includes(letter)
     const isCorrect = isGuessed && currentWord.includes(letter)
@@ -51,12 +51,19 @@ function addGuessedLetter(letter) {
     })
 
     return (
-      <button key={letter} onClick={() => 
+      <button key={letter} onClick={() =>
         addGuessedLetter(letter)} className={className}>
         {letter.toUpperCase()}
       </button>
     )
-  })  
+  })
+
+
+  const gameStatusClass = clsx("game-status", {
+    won: isGameWon,
+    lost: isGameLost
+  })
+
 
   return (
     <main>
@@ -65,9 +72,23 @@ function addGuessedLetter(letter) {
         <p>Guess the word within 8 attempts to keep the
           programming world safe from Assembly!</p>
       </header>
-      <section className="game-status">
-          <h2>You Win!</h2>
-          <p>Well Done! 🎉 </p>
+    <section className={gameStatusClass}>
+        {isGameOver ? (
+          isGameWon ? (
+            <>
+              <h2>You win!</h2>
+              <p>Well done! 🎉</p>
+            </>
+          ) : (
+            <>
+              <h2>Game over!</h2>
+              <p>You lose! Better start learning Assembly 😭</p>
+            </>
+          )
+        ) : (
+          null
+        )
+        }
       </section>
       <section className="language-chips">
         {languageElement}
@@ -79,7 +100,7 @@ function addGuessedLetter(letter) {
         {keyboardElements}
       </section>
 
-     {isGameOver && <button className="new-game">New Game</button>}
+      {isGameOver && <button className="new-game">New Game</button>}
     </main>
   )
 }
