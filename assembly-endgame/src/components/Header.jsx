@@ -1,5 +1,6 @@
 import { languages } from "../languages"
 import { useState } from "react"
+import {getFarewellText} from "../utils"
 import clsx from "clsx"
 
 
@@ -13,6 +14,9 @@ export default function Header() {
     currentWord.split("").every(letter => guessedLetters.includes(letter))
   const isGameLost = wrongGuessCount >= languages.length - 1
   const isGameOver = isGameWon || isGameLost
+  const LastGuessedLetter = guessedLetters[guessedLetters.length - 1]
+  const isLastGuessIncorrect = LastGuessedLetter && !currentWord.includes(LastGuessedLetter)
+  
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
@@ -60,12 +64,14 @@ export default function Header() {
 
   const gameStatusClass = clsx("game-status", {
     won: isGameWon,
-    lost: isGameLost
+    lost: isGameLost,
+    farewell: isLastGuessIncorrect && !isGameOver
   })
 
   function renderGameStatus() {
-    if (!isGameOver) {
-      return null
+    if (!isGameOver && isLastGuessIncorrect) {
+      return (<p className="farewell-message">
+        {getFarewellText(languages[wrongGuessCount - 1].name)}</p>)
     }
 
     if (isGameWon) {
@@ -75,7 +81,8 @@ export default function Header() {
           <p>Well done! 🎉</p>
         </>
       )
-    } else {
+    }
+     else {
       return (
         <>
           <h2>Game over!</h2>
