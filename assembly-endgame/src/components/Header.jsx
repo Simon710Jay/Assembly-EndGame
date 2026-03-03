@@ -1,6 +1,6 @@
 import { languages } from "../languages"
 import { useState } from "react"
-import {getFarewellText} from "../utils"
+import { getFarewellText } from "../utils"
 import clsx from "clsx"
 
 
@@ -16,7 +16,7 @@ export default function Header() {
   const isGameOver = isGameWon || isGameLost
   const LastGuessedLetter = guessedLetters[guessedLetters.length - 1]
   const isLastGuessIncorrect = LastGuessedLetter && !currentWord.includes(LastGuessedLetter)
-  
+
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
@@ -55,8 +55,10 @@ export default function Header() {
     })
 
     return (
-      <button key={letter} onClick={() =>
-        addGuessedLetter(letter)} className={className}>
+      <button key={letter}
+        disabled={isGameOver}
+        onClick={() =>
+          addGuessedLetter(letter)} className={className}>
         {letter.toUpperCase()}
       </button>
     )
@@ -82,7 +84,7 @@ export default function Header() {
         </>
       )
     }
-     else {
+    if (isGameLost) {
       return (
         <>
           <h2>Game over!</h2>
@@ -90,6 +92,9 @@ export default function Header() {
         </>
       )
     }
+
+    return null 
+
   }
 
   return (
