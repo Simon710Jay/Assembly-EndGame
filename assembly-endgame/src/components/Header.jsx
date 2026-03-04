@@ -1,21 +1,23 @@
 import { languages } from "../languages"
 import { useState } from "react"
 import { getFarewellText } from "../utils"
+import { getRandomWords } from "../utils"
 import clsx from "clsx"
 
 
 export default function Header() {
-  const [currentWord, setCurrentWord] = useState("react")
+  const [currentWord, setCurrentWord] = useState(getRandomWords())
   const [guessedLetters, setGuessedLetters] = useState([])
 
+  const numGuessesLeft = languages.length - 1
   const wrongGuessCount =
     guessedLetters.filter(letter => !currentWord.includes(letter)).length
   const isGameWon =
     currentWord.split("").every(letter => guessedLetters.includes(letter))
-  const isGameLost = wrongGuessCount >= languages.length - 1
+  const isGameLost = wrongGuessCount >= numGuessesLeft
   const isGameOver = isGameWon || isGameLost
-  const LastGuessedLetter = guessedLetters[guessedLetters.length - 1]
-  const isLastGuessIncorrect = LastGuessedLetter && !currentWord.includes(LastGuessedLetter)
+  const lastGuessedLetter = guessedLetters[guessedLetters.length - 1]
+  const isLastGuessIncorrect = lastGuessedLetter && !currentWord.includes(lastGuessedLetter)
 
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -119,11 +121,20 @@ export default function Header() {
         {letterElement}
       </section>
 
+      {/* This section is visually hidden but will be read by screen readers to provide feedback on the last guess and the current state of the word */}
       <section
         className="sr-only"
         aria-live="polite"
         role="status"
       >
+        <p>
+          {
+         currentWord.includes(lastGuessedLetter) ?
+              `Correct! The letter '${lastGuessedLetter}' is in the word.` :
+              `Sorry, the letter '${lastGuessedLetter}' is not in the word.`
+          }
+          You have {numGuessesLeft} guesses left.
+        </p>
         <p>Current word: {currentWord.split("").map(letter =>
           guessedLetters.includes(letter) ? letter + "." : "blank.")
           .join("")}</p>
