@@ -22,6 +22,11 @@ export default function Header() {
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
+  function resetGame() {
+    setCurrentWord(getRandomWords())
+    setGuessedLetters([])
+  }
+
   function addGuessedLetter(letter) {
     setGuessedLetters(prevLetters =>
       prevLetters.includes(letter) ? prevLetters :
@@ -43,9 +48,17 @@ export default function Header() {
     </span>
   })
 
-  const letterElement = currentWord.split("").map((letter, index) => (
-    <span key={index}>{guessedLetters.includes(letter) ? letter.toUpperCase() : ""}</span>
-  ))
+    const letterElements = currentWord.split("").map((letter, index) => {
+        const shouldRevealLetter = isGameLost || guessedLetters.includes(letter)
+        const letterClassName = clsx(
+            isGameLost && !guessedLetters.includes(letter) && "missed-letter"
+        )
+        return (
+            <span key={index} className={letterClassName}>
+                {shouldRevealLetter ? letter.toUpperCase() : ""}
+            </span>
+        )
+    })
 
   const keyboardElements = alphabet.split("").map((letter) => {
     const isGuessed = guessedLetters.includes(letter)
@@ -118,7 +131,7 @@ export default function Header() {
         {languageElement}
       </section>
       <section className="word">
-        {letterElement}
+        {letterElements}
       </section>
 
       {/* This section is visually hidden but will be read by screen readers to provide feedback on the last guess and the current state of the word */}
@@ -145,7 +158,10 @@ export default function Header() {
         {keyboardElements}
       </section>
 
-      {isGameOver && <button className="new-game">New Game</button>}
+      {isGameOver && <button className="new-game" 
+      onClick={resetGame}>
+        New Game
+      </button>}
     </main>
   )
 }
